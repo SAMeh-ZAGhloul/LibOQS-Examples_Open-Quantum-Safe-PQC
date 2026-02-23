@@ -1,6 +1,6 @@
 # LibOQS - Open Quantum Safe PQC
 
-This project provides examples on using Python bindings for **liboqs**, a C library for quantum-resistant cryptographic algorithms from the [Open Quantum Safe](https://openquantumsafe.org/) project.
+This project provides **examples** on using Python bindings for **liboqs**, a C library for quantum-resistant cryptographic algorithms from the [Open Quantum Safe](https://openquantumsafe.org/) project.
 
 ---
 
@@ -9,16 +9,6 @@ This project provides examples on using Python bindings for **liboqs**, a C libr
 The **Open Quantum Safe (OQS) project** aims to develop and prototype quantum-resistant cryptography. As quantum computers advance, traditional cryptographic algorithms like RSA and ECC will become vulnerable to attacks. This project provides post-quantum cryptographic algorithms that are secure against both classical and quantum computers.
 
 **liboqs-python** offers Python 3 bindings for the [liboqs](https://github.com/open-quantum-safe/liboqs/) C library, enabling easy integration of quantum-resistant cryptography into Python applications.
-
----
-
-## Features
-
-- **Post-Quantum Key Encapsulation (KEM)**: ML-KEM (Kyber) and other IND-CCA2 secure algorithms
-- **Post-Quantum Signatures**: ML-DSA (Dilithium), FN-DSA (Falcon), and more
-- **Stateful Signature Schemes**: XMSS and XMSS^MT for forward security
-- **Multiple RNG Sources**: System random, OpenSSL-based random numbers
-- **Cross-Platform Support**: Works on Linux, macOS, and Windows
 
 ---
 
@@ -40,6 +30,27 @@ If liboqs is not detected at runtime, it will be downloaded, configured, and ins
 ```bash
 docker build -t oqs-python .
 docker run -it oqs-python sh -c ". venv/bin/activate && python liboqs-python/examples/kem.py"
+```
+
+---
+## Recommended: Hybrid PQC Mode
+
+For production use, combine classical and post-quantum algorithms:
+
+```python
+# Example: Hybrid key encapsulation
+import oqs
+
+# Generate classical keypair (e.g., X25519)
+classical_kem = oqs.KeyEncapsulation("X25519")
+classical_public = classical_kem.generate_keypair()
+
+# Generate post-quantum keypair
+pq_kem = oqs.KeyEncapsulation("ML-KEM-512")
+pq_public = pq_kem.generate_keypair()
+
+# Combine both public keys
+combined_public = classical_public + pq_public
 ```
 
 ---
@@ -272,25 +283,4 @@ jupyter notebook LIBOQS2.ipynb
 
 ---
 
-### Recommended: Hybrid Mode
-
-For production use, combine classical and post-quantum algorithms:
-
-```python
-# Example: Hybrid key encapsulation
-import oqs
-
-# Generate classical keypair (e.g., X25519)
-classical_kem = oqs.KeyEncapsulation("X25519")
-classical_public = classical_kem.generate_keypair()
-
-# Generate post-quantum keypair
-pq_kem = oqs.KeyEncapsulation("ML-KEM-512")
-pq_public = pq_kem.generate_keypair()
-
-# Combine both public keys
-combined_public = classical_public + pq_public
-```
-
----
 
