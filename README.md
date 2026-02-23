@@ -11,6 +11,45 @@ The **Open Quantum Safe (OQS) project** aims to develop and prototype quantum-re
 **liboqs-python** offers Python 3 bindings for the [liboqs](https://github.com/open-quantum-safe/liboqs/) C library, enabling easy integration of quantum-resistant cryptography into Python applications.
 
 ---
+## Notebook Demo
+
+This project includes an interactive Jupyter notebook demonstrating all features:
+
+**File:** `LIBOQS2.ipynb`
+
+The notebook covers:
+1. Installation of liboqs-python
+2. Running KEM examples
+3. Running signature examples
+4. Running stateful signature examples
+5. Running random number generation examples
+
+To run the notebook:
+```bash
+jupyter notebook LIBOQS2.ipynb
+```
+
+## PQC Recommendation: Hybrid Mode
+
+For production use, combine classical and post-quantum algorithms:
+
+```python
+# Example: Hybrid key encapsulation
+import oqs
+
+# Generate classical keypair (e.g., X25519)
+classical_kem = oqs.KeyEncapsulation("X25519")
+classical_public = classical_kem.generate_keypair()
+
+# Generate post-quantum keypair
+pq_kem = oqs.KeyEncapsulation("ML-KEM-512")
+pq_public = pq_kem.generate_keypair()
+
+# Combine both public keys
+combined_public = classical_public + pq_public
+```
+
+---
 
 ## Installation
 
@@ -30,27 +69,6 @@ If liboqs is not detected at runtime, it will be downloaded, configured, and ins
 ```bash
 docker build -t oqs-python .
 docker run -it oqs-python sh -c ". venv/bin/activate && python liboqs-python/examples/kem.py"
-```
-
----
-## Recommended: Hybrid PQC Mode
-
-For production use, combine classical and post-quantum algorithms:
-
-```python
-# Example: Hybrid key encapsulation
-import oqs
-
-# Generate classical keypair (e.g., X25519)
-classical_kem = oqs.KeyEncapsulation("X25519")
-classical_public = classical_kem.generate_keypair()
-
-# Generate post-quantum keypair
-pq_kem = oqs.KeyEncapsulation("ML-KEM-512")
-pq_public = pq_kem.generate_keypair()
-
-# Combine both public keys
-combined_public = classical_public + pq_public
 ```
 
 ---
@@ -263,23 +281,7 @@ python3 liboqs-python/examples/rand.py
 
 ---
 
-## Notebook Demo
 
-This project includes an interactive Jupyter notebook demonstrating all features:
-
-**File:** `LIBOQS2.ipynb`
-
-The notebook covers:
-1. Installation of liboqs-python
-2. Running KEM examples
-3. Running signature examples
-4. Running stateful signature examples
-5. Running random number generation examples
-
-To run the notebook:
-```bash
-jupyter notebook LIBOQS2.ipynb
-```
 
 ---
 
